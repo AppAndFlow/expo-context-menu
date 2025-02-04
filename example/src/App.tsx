@@ -1,20 +1,133 @@
-import { multiply } from 'react-native-context-menu';
-import { Text, View, StyleSheet } from 'react-native';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import {
+  ContextMenu,
+  MenuItem,
+  PortalProvider,
+} from 'react-native-context-menu';
+import { View, StyleSheet, Text } from 'react-native';
 
-const result = multiply(3, 7);
+const Cell = ({
+  backgroundColor,
+  label,
+}: {
+  backgroundColor: string;
+  label: string;
+}) => {
+  return (
+    <ContextMenu
+      isFullScreen
+      menuItems={
+        <>
+          <MenuItem
+            title="Share"
+            icon="share-2"
+            onPress={() => console.log('Share')}
+          />
+          <View
+            style={{
+              height: 1,
+              backgroundColor: '#E6E9EB',
+              width: '100%',
+            }}
+          />
+          <MenuItem
+            title="Add to Favorites"
+            icon="star"
+            onPress={() => console.log('Favorite')}
+          />
+          <View
+            style={{
+              height: 1,
+              backgroundColor: '#E6E9EB',
+              width: '100%',
+            }}
+          />
+          <MenuItem
+            title="Delete"
+            icon="trash-2"
+            destructive
+            onPress={() => console.log('Delete')}
+          />
+        </>
+      }
+    >
+      <View
+        style={{
+          backgroundColor: 'white',
+          padding: 4,
+          borderRadius: 12,
+          borderWidth: 1,
+          borderColor: '#E6E9EB',
+          // shadowColor: '#000',
+          // shadowOffset: {
+          //   width: 0,
+          //   height: 1,
+          // },
+          // shadowOpacity: 0.22,
+        }}
+      >
+        <View
+          style={{
+            height: 100,
+            width: 100,
+            backgroundColor: backgroundColor,
+            alignItems: 'center',
+            justifyContent: 'center',
+            borderRadius: 12,
+          }}
+        >
+          <Text style={{ color: 'white' }}>{label}</Text>
+        </View>
+
+        <View style={{ padding: 4, backgroundColor: 'white' }}>
+          <Text>{label}</Text>
+        </View>
+      </View>
+    </ContextMenu>
+  );
+};
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text>Result: {result}</Text>
-    </View>
+    <SafeAreaProvider>
+      <PortalProvider>
+        <View style={styles.container}>
+          <View style={styles.row}>
+            <Cell backgroundColor="red" label="A" />
+            <Cell backgroundColor="blue" label="B" />
+          </View>
+          <View style={styles.row}>
+            <Cell backgroundColor="green" label="C" />
+            <Cell backgroundColor="purple" label="D" />
+          </View>
+
+          <View style={styles.row}>
+            <Cell backgroundColor="red" label="A" />
+            <Cell backgroundColor="blue" label="B" />
+          </View>
+
+          <View style={styles.row}>
+            <Cell backgroundColor="green" label="C" />
+            <Cell backgroundColor="purple" label="D" />
+          </View>
+        </View>
+      </PortalProvider>
+    </SafeAreaProvider>
   );
 }
 
 const styles = StyleSheet.create({
+  row: {
+    justifyContent: 'space-between',
+    flexDirection: 'row',
+    width: '100%',
+  },
   container: {
+    padding: 16,
     flex: 1,
-    alignItems: 'center',
+    alignItems: 'flex-start',
     justifyContent: 'center',
+    gap: 8,
+    backgroundColor: 'white',
   },
 });
