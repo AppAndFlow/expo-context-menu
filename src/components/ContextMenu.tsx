@@ -14,6 +14,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import { Portal } from 'react-native-context-menu';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import * as Haptics from 'expo-haptics';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
@@ -64,7 +65,10 @@ export const ContextMenu: React.FC<ContextMenuProps> = ({
     });
   };
 
-  const onLongPress = () => {
+  const onLongPress = async () => {
+    await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
+    await new Promise((resolve) => setTimeout(resolve, 300));
+
     setShow(true);
     scale.value = withSpring(1, { damping: 15 });
     opacity.value = withTiming(1, { duration: 200 });

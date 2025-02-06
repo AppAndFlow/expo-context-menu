@@ -12,7 +12,8 @@ const Portal: React.FC<PortalProps> = ({ children, name }) => {
     return () => {
       removeComponent(name);
     };
-  }, [addComponent, children, name, removeComponent]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [children, name]);
 
   return null;
 };
