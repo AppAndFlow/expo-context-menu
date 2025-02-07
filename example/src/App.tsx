@@ -16,7 +16,7 @@ const Cell = ({
 }) => {
   return (
     <ContextMenu
-      // isFullScreen
+      isFullScreen
       menuItems={
         <>
           <ContextMenuItem

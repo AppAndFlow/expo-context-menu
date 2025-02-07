@@ -18,7 +18,7 @@ import Animated, {
   Easing,
   ReduceMotion,
 } from 'react-native-reanimated';
-import { Portal } from 'react-native-context-menu';
+import Portal from './Portal';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import * as Haptics from 'expo-haptics';
 
@@ -79,6 +79,9 @@ export const ContextMenu: React.FC<ContextMenuProps> = ({
   };
 
   const onMenuLayout = (event: LayoutChangeEvent) => {
+    if (menuLayout.width === event.nativeEvent.layout.width) {
+      return;
+    }
     setMenuLayout({
       x: event.nativeEvent.layout.x,
       y: event.nativeEvent.layout.y,
@@ -88,56 +91,78 @@ export const ContextMenu: React.FC<ContextMenuProps> = ({
   };
 
   const onLongPress = async () => {
+    const ANIM_DURATION = isFullScreen ? 200 : 50;
     await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
-    await new Promise((resolve) => setTimeout(resolve, 300));
+    await new Promise((resolve) => setTimeout(resolve, 150));
+
+    const springOpts = isFullScreen
+      ? {
+          mass: 1,
+          damping: 22,
+          stiffness: 200,
+          overshootClamping: false,
+          restDisplacementThreshold: 0.01,
+          restSpeedThreshold: 2,
+          reduceMotion: ReduceMotion.Never,
+        }
+      : {
+          mass: 1,
+          damping: 30,
+          stiffness: 400,
+          overshootClamping: false,
+          restDisplacementThreshold: 0.01,
+          restSpeedThreshold: 2,
+          reduceMotion: ReduceMotion.Never,
+        };
 
     setShow(true);
-    scale.value = withSpring(1, { damping: 15 });
-    opacity.value = withTiming(1, { duration: 200 });
-    menuOpacity.value = withTiming(1, { duration: 100 });
+    scale.value = withSpring(1, springOpts);
+    opacity.value = withTiming(1, { duration: ANIM_DURATION });
+    menuOpacity.value = withTiming(1, { duration: ANIM_DURATION / 2 });
 
     if (isFullScreen) {
       childrenScale.value = withSequence(
-        withSpring(2.1, { damping: 15 }),
-        withSpring(2, { damping: 15 })
+        withSpring(2.05, springOpts),
+        withSpring(2, springOpts)
       );
 
       // Center horizontally - adjusted calculation
       const screenCenter = SCREEN_WIDTH / 2;
       const targetX = screenCenter - childrenLayout.height / 2;
 
-      childrenTranslateX.value = withSpring(targetX - childrenLayout.x + 16, {
-        damping: 15,
-      });
+      childrenTranslateX.value = withSpring(
+        targetX - childrenLayout.x + 16,
+        springOpts
+      );
 
       const targetY =
         -childrenLayout.y + insets.top + 20 + childrenLayout.height / 2;
 
-      translateY.value = withSpring(targetY + childrenLayout.height / 2, {
-        damping: 15,
-      });
+      translateY.value = withSpring(
+        targetY + childrenLayout.height / 2,
+        springOpts
+      );
 
       const valX = childrenLayout.width / 2;
 
-      translateX.value = withSpring(hasHorizontalPlace ? valX : -valX, {
-        damping: 15,
-      });
+      translateX.value = withSpring(
+        hasHorizontalPlace ? valX : -valX,
+        springOpts
+      );
 
-      realChildrenOpacity.value = withSpring(0, { damping: 15 });
+      realChildrenOpacity.value = withSpring(0, springOpts);
 
       // Vertical positioning
-      childrenTranslateY.value = withSpring(targetY, {
-        damping: 15,
-      });
+      childrenTranslateY.value = withSpring(targetY, springOpts);
     } else {
-      translateY.value = withSpring(0, { damping: 15 });
+      translateY.value = withSpring(0, springOpts);
       childrenScale.value = withSequence(
-        withSpring(1.1, { damping: 15 }),
-        withSpring(0.97, { damping: 15 })
+        withSpring(1.02, springOpts),
+        withSpring(0.97, springOpts)
       );
     }
 
-    childrenOpacity.value = withTiming(1, { duration: 200 });
+    childrenOpacity.value = withTiming(1, { duration: ANIM_DURATION });
   };
 
   const hideMenu = () => {
@@ -224,7 +249,9 @@ export const ContextMenu: React.FC<ContextMenuProps> = ({
         onLayout={onChildrenLayout}
         ref={childrenRef}
       >
-        <Pressable onLongPress={onLongPress}>{children}</Pressable>
+        <Pressable delayLongPress={100} onLongPress={onLongPress}>
+          {children}
+        </Pressable>
       </Animated.View>
 
       <Portal name="context-menu">
@@ -306,12 +333,11 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0, 0, 0, 0.2)',
   },
   menuContainer: {
-    // backgroundColor: 'rgba(255, 255, 255, 0.85)',
     backgroundColor: '#FAFBFB',
     borderRadius: 12,
     overflow: 'hidden',
     minWidth: 250,
-    padding: 0, // Remove padding since items will have their own
+    padding: 0,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
