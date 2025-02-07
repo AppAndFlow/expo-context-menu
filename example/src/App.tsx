@@ -1,10 +1,11 @@
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import {
   ContextMenu,
-  MenuItem,
+  ContextMenuItem,
   PortalProvider,
 } from 'react-native-context-menu';
 import { View, StyleSheet, Text } from 'react-native';
+import Ionicons from '@expo/vector-icons/Ionicons';
 
 const Cell = ({
   backgroundColor,
@@ -15,12 +16,12 @@ const Cell = ({
 }) => {
   return (
     <ContextMenu
-      isFullScreen
+      // isFullScreen
       menuItems={
         <>
-          <MenuItem
+          <ContextMenuItem
             title="Share"
-            icon="share-2"
+            icon={<Ionicons name="share" size={20} />}
             onPress={() => console.log('Share')}
           />
           <View
@@ -30,9 +31,9 @@ const Cell = ({
               width: '100%',
             }}
           />
-          <MenuItem
+          <ContextMenuItem
             title="Add to Favorites"
-            icon="star"
+            icon={<Ionicons name="star" size={20} />}
             onPress={() => console.log('Favorite')}
           />
           <View
@@ -42,9 +43,9 @@ const Cell = ({
               width: '100%',
             }}
           />
-          <MenuItem
+          <ContextMenuItem
             title="Delete"
-            icon="trash-2"
+            icon={<Ionicons name="trash" size={20} />}
             destructive
             onPress={() => console.log('Delete')}
           />

@@ -1,17 +1,18 @@
 import React from 'react';
-import { StyleSheet, Text, Pressable } from 'react-native';
+import { StyleSheet, Text, Pressable, View } from 'react-native';
 
-interface MenuItemProps {
+interface ContextMenuItemProps {
   onPress: () => void;
   title: string;
-  icon?: string;
+  icon?: React.ReactElement;
   destructive?: boolean;
 }
 
-export const MenuItem: React.FC<MenuItemProps> = ({
+export const ContextMenuItem: React.FC<ContextMenuItemProps> = ({
   onPress,
   title,
   destructive = false,
+  icon,
 }) => {
   return (
     <Pressable
@@ -21,6 +22,8 @@ export const MenuItem: React.FC<MenuItemProps> = ({
       <Text style={[styles.text, destructive && styles.destructiveText]}>
         {title}
       </Text>
+
+      {icon && <View style={styles.iconContainer}>{icon}</View>}
     </Pressable>
   );
 };
@@ -29,6 +32,7 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'space-between',
     padding: 12,
     backgroundColor: 'transparent',
   },

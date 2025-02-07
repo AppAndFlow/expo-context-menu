@@ -1,5 +1,11 @@
 import React, { useRef, useState } from 'react';
-import { Pressable, StyleSheet, Dimensions, View } from 'react-native';
+import {
+  Pressable,
+  StyleSheet,
+  Dimensions,
+  View,
+  type LayoutChangeEvent,
+} from 'react-native';
 import { BlurView } from 'expo-blur';
 import Animated, {
   withSpring,
@@ -39,6 +45,12 @@ export const ContextMenu: React.FC<ContextMenuProps> = ({
     width: 0,
     height: 0,
   });
+  const [menuLayout, setMenuLayout] = useState({
+    x: 0,
+    y: 0,
+    width: 0,
+    height: 0,
+  });
 
   const [show, setShow] = useState(false);
   const scale = useSharedValue(0);
@@ -53,15 +65,25 @@ export const ContextMenu: React.FC<ContextMenuProps> = ({
   const childrenTranslateX = useSharedValue(0);
   const childrenTranslateY = useSharedValue(0);
 
-  const hasPlace =
-    childrenLayout.y + childrenLayout.height + 20 + 150 <
+  const hasVerticalPlace =
+    childrenLayout.y + childrenLayout.height + 20 + menuLayout.height <
     SCREEN_HEIGHT - insets.bottom;
 
-  const hasHorizontalPlace = childrenLayout.x + 250 < SCREEN_WIDTH;
+  const hasHorizontalPlace =
+    childrenLayout.x + menuLayout.height < SCREEN_WIDTH;
 
-  const onLayout = () => {
+  const onChildrenLayout = () => {
     childrenRef.current?.measureInWindow((x, y, width, height) => {
       setChildrenLayout({ x, y, width, height });
+    });
+  };
+
+  const onMenuLayout = (event: LayoutChangeEvent) => {
+    setMenuLayout({
+      x: event.nativeEvent.layout.x,
+      y: event.nativeEvent.layout.y,
+      width: event.nativeEvent.layout.width,
+      height: event.nativeEvent.layout.height,
     });
   };
 
@@ -199,14 +221,13 @@ export const ContextMenu: React.FC<ContextMenuProps> = ({
     <>
       <Animated.View
         style={animatedRealChildrenStyle}
-        onLayout={onLayout}
+        onLayout={onChildrenLayout}
         ref={childrenRef}
       >
         <Pressable onLongPress={onLongPress}>{children}</Pressable>
       </Animated.View>
 
       <Portal name="context-menu">
-        {/* {show && ( */}
         <Animated.View
           style={[
             StyleSheet.absoluteFill,
@@ -224,7 +245,6 @@ export const ContextMenu: React.FC<ContextMenuProps> = ({
             >
               <Animated.View
                 style={[
-                  styles.childrenShadow,
                   animatedChildrenStyle,
                   {
                     overflow: 'hidden',
@@ -239,13 +259,14 @@ export const ContextMenu: React.FC<ContextMenuProps> = ({
                 {children}
               </Animated.View>
               <Animated.View
+                onLayout={onMenuLayout}
                 style={[
                   styles.menuContainer,
                   animatedMenuStyle,
                   {
                     position: 'absolute',
                     top:
-                      hasPlace || isFullScreen
+                      hasVerticalPlace || isFullScreen
                         ? childrenLayout.y + childrenLayout.height + 20
                         : childrenLayout.y - childrenLayout.height - 20,
                     left: hasHorizontalPlace ? childrenLayout.x : undefined,
@@ -260,7 +281,6 @@ export const ContextMenu: React.FC<ContextMenuProps> = ({
             </AnimatedBlurView>
           </Pressable>
         </Animated.View>
-        {/* )} */}
       </Portal>
     </>
   );
@@ -276,19 +296,6 @@ const styles = StyleSheet.create({
     zIndex: 99999,
     height: SCREEN_HEIGHT,
     width: SCREEN_WIDTH,
-    // backgroundColor: 'red',
-  },
-  childrenShadow: {
-    // backgroundColor: 'white',
-    // shadowColor: '#000',
-    // shadowOffset: {
-    //   width: 0,
-    //   height: 2,
-    // },
-    // shadowOpacity: 0.25,
-    // shadowRadius: 3.84,
-    // elevation: 5, // for Android
-    // borderRadius: 8, // optional, for rounded corners
   },
   blurView: {
     ...StyleSheet.absoluteFillObject,
