@@ -1,9 +1,9 @@
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import {
-  ContextMenu,
-  ContextMenuItem,
-  PortalProvider,
-} from 'react-native-context-menu';
+  ExpoContextMenu,
+  ExpoContextMenuItem,
+  ExpoContextMenuProvider,
+} from '@appandflow/expo-context-menu';
 import { View, StyleSheet, Text } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 
@@ -15,11 +15,11 @@ const Cell = ({
   label: string;
 }) => {
   return (
-    <ContextMenu
+    <ExpoContextMenu
       isFullScreen
       menuItems={
         <>
-          <ContextMenuItem
+          <ExpoContextMenuItem
             title="Share"
             icon={<Ionicons name="share" size={20} />}
             onPress={() => console.log('Share')}
@@ -31,7 +31,7 @@ const Cell = ({
               width: '100%',
             }}
           />
-          <ContextMenuItem
+          <ExpoContextMenuItem
             title="Add to Favorites"
             icon={<Ionicons name="star" size={20} />}
             onPress={() => console.log('Favorite')}
@@ -43,7 +43,7 @@ const Cell = ({
               width: '100%',
             }}
           />
-          <ContextMenuItem
+          <ExpoContextMenuItem
             title="Delete"
             icon={<Ionicons name="trash" size={20} />}
             destructive
@@ -84,14 +84,14 @@ const Cell = ({
           <Text>{label}</Text>
         </View>
       </View>
-    </ContextMenu>
+    </ExpoContextMenu>
   );
 };
 
 export default function App() {
   return (
     <SafeAreaProvider>
-      <PortalProvider>
+      <ExpoContextMenuProvider>
         <View style={styles.container}>
           <View style={styles.row}>
             <Cell backgroundColor="red" label="A" />
@@ -112,7 +112,7 @@ export default function App() {
             <Cell backgroundColor="purple" label="D" />
           </View>
         </View>
-      </PortalProvider>
+      </ExpoContextMenuProvider>
     </SafeAreaProvider>
   );
 }

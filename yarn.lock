@@ -27,6 +27,41 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@appandflow/expo-context-menu@workspace:.":
+  version: 0.0.0-use.local
+  resolution: "@appandflow/expo-context-menu@workspace:."
+  dependencies:
+    "@commitlint/config-conventional": ^17.0.2
+    "@evilmartians/lefthook": ^1.5.0
+    "@react-native/eslint-config": ^0.73.1
+    "@release-it/conventional-changelog": ^9.0.2
+    "@types/jest": ^29.5.5
+    "@types/react": ^18.2.44
+    commitlint: ^17.0.2
+    del-cli: ^5.1.0
+    eslint: ^8.51.0
+    eslint-config-prettier: ^9.0.0
+    eslint-plugin-prettier: ^5.0.1
+    expo-blur: "*"
+    expo-haptics: ^14.0.1
+    jest: ^29.7.0
+    prettier: ^3.0.3
+    react: 18.3.1
+    react-native: 0.76.6
+    react-native-builder-bob: ^0.36.0
+    react-native-reanimated: ">=3"
+    react-native-safe-area-context: "*"
+    release-it: ^17.10.0
+    typescript: ^5.2.2
+  peerDependencies:
+    expo-blur: "*"
+    react: "*"
+    react-native: "*"
+    react-native-reanimated: ">=3"
+    react-native-safe-area-context: "*"
+  languageName: unknown
+  linkType: soft
+
 "@babel/code-frame@npm:7.10.4, @babel/code-frame@npm:~7.10.4":
   version: 7.10.4
   resolution: "@babel/code-frame@npm:7.10.4"
@@ -6547,6 +6582,25 @@ __metadata:
   languageName: node
   linkType: hard
 
+"expo-context-menu-example@workspace:example":
+  version: 0.0.0-use.local
+  resolution: "expo-context-menu-example@workspace:example"
+  dependencies:
+    "@babel/core": ^7.20.0
+    "@expo/metro-runtime": ~4.0.1
+    expo: ~52.0.28
+    expo-blur: ~14.0.3
+    expo-status-bar: ~2.0.1
+    react: 18.3.1
+    react-dom: 18.3.1
+    react-native: 0.76.6
+    react-native-builder-bob: ^0.36.0
+    react-native-reanimated: ~3.16.1
+    react-native-safe-area-context: 4.12.0
+    react-native-web: ~0.19.13
+  languageName: unknown
+  linkType: soft
+
 "expo-file-system@npm:~18.0.9":
   version: 18.0.9
   resolution: "expo-file-system@npm:18.0.9"
@@ -11798,60 +11852,6 @@ __metadata:
   checksum: 2d47c039e3d6f90cd6a074cbe35c2dfc96868a73a6aee503fb981aace1c1ec2830517ce4910f5e368a558ed2f10302f60361cb1bf37ef341a913d125020bd2ee
   languageName: node
   linkType: hard
-
-"react-native-context-menu-example@workspace:example":
-  version: 0.0.0-use.local
-  resolution: "react-native-context-menu-example@workspace:example"
-  dependencies:
-    "@babel/core": ^7.20.0
-    "@expo/metro-runtime": ~4.0.1
-    expo: ~52.0.28
-    expo-blur: ~14.0.3
-    expo-status-bar: ~2.0.1
-    react: 18.3.1
-    react-dom: 18.3.1
-    react-native: 0.76.6
-    react-native-builder-bob: ^0.36.0
-    react-native-reanimated: ~3.16.1
-    react-native-safe-area-context: 4.12.0
-    react-native-web: ~0.19.13
-  languageName: unknown
-  linkType: soft
-
-"react-native-context-menu@workspace:.":
-  version: 0.0.0-use.local
-  resolution: "react-native-context-menu@workspace:."
-  dependencies:
-    "@commitlint/config-conventional": ^17.0.2
-    "@evilmartians/lefthook": ^1.5.0
-    "@react-native/eslint-config": ^0.73.1
-    "@release-it/conventional-changelog": ^9.0.2
-    "@types/jest": ^29.5.5
-    "@types/react": ^18.2.44
-    commitlint: ^17.0.2
-    del-cli: ^5.1.0
-    eslint: ^8.51.0
-    eslint-config-prettier: ^9.0.0
-    eslint-plugin-prettier: ^5.0.1
-    expo-blur: "*"
-    expo-haptics: ^14.0.1
-    jest: ^29.7.0
-    prettier: ^3.0.3
-    react: 18.3.1
-    react-native: 0.76.6
-    react-native-builder-bob: ^0.36.0
-    react-native-reanimated: ">=3"
-    react-native-safe-area-context: "*"
-    release-it: ^17.10.0
-    typescript: ^5.2.2
-  peerDependencies:
-    expo-blur: "*"
-    react: "*"
-    react-native: "*"
-    react-native-reanimated: ">=3"
-    react-native-safe-area-context: "*"
-  languageName: unknown
-  linkType: soft
 
 "react-native-reanimated@npm:>=3, react-native-reanimated@npm:~3.16.1":
   version: 3.16.7

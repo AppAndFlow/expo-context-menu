@@ -1,24 +1,14 @@
-# react-native-context-menu
+# expo-context-menu
 
-Context Menu For React-Native
+Context Menu For Expo
 
 ## Installation
 
 ```sh
-npm install react-native-context-menu
+npm install @appandflow/expo-context-menu
 ```
 
 ## Usage
-
-
-```js
-import { multiply } from 'react-native-context-menu';
-
-// ...
-
-const result = await multiply(3, 7);
-```
-
 
 ## Contributing
 
