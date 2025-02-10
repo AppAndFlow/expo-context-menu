@@ -273,6 +273,7 @@ export const ExpoContextMenu: React.FC<ContextMenuProps> = ({
             {
               backgroundColor: 'transparent',
               pointerEvents: show ? 'auto' : 'none',
+              zIndex: 9999,
             },
           ]}
         >
