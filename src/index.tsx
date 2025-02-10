@@ -1,3 +1,3 @@
-export { ContextMenu as ExpoContextMenu } from './components/ContextMenu';
-export { ContextMenuItem as ExpoContextMenuItem } from './components/ContextMenuItem';
+export { ExpoContextMenu } from './components/ExpoContextMenu';
+export { ExpoContextMenuItem } from './components/ExpoContextMenuItem';
 export { default as ExpoContextMenuProvider } from './components/PortalProvider';

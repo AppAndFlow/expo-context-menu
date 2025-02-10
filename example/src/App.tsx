@@ -1,7 +1,6 @@
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import {
   ExpoContextMenu,
-  ExpoContextMenuItem,
   ExpoContextMenuProvider,
 } from '@appandflow/expo-context-menu';
 import { View, StyleSheet, Text } from 'react-native';
@@ -17,40 +16,24 @@ const Cell = ({
   return (
     <ExpoContextMenu
       isFullScreen
-      menuItems={
-        <>
-          <ExpoContextMenuItem
-            title="Share"
-            icon={<Ionicons name="share" size={20} />}
-            onPress={() => console.log('Share')}
-          />
-          <View
-            style={{
-              height: 1,
-              backgroundColor: '#E6E9EB',
-              width: '100%',
-            }}
-          />
-          <ExpoContextMenuItem
-            title="Add to Favorites"
-            icon={<Ionicons name="star" size={20} />}
-            onPress={() => console.log('Favorite')}
-          />
-          <View
-            style={{
-              height: 1,
-              backgroundColor: '#E6E9EB',
-              width: '100%',
-            }}
-          />
-          <ExpoContextMenuItem
-            title="Delete"
-            icon={<Ionicons name="trash" size={20} />}
-            destructive
-            onPress={() => console.log('Delete')}
-          />
-        </>
-      }
+      menuItems={[
+        {
+          title: 'Share',
+          icon: <Ionicons name="share" size={20} />,
+          onPress: () => console.log('Share'),
+        },
+        {
+          title: 'Add To Favorites',
+          icon: <Ionicons name="star" size={20} />,
+          onPress: () => console.log('Favorit'),
+        },
+        {
+          title: 'Delete',
+          icon: <Ionicons name="trash" size={20} />,
+          onPress: () => console.log('Delete'),
+          destructive: true,
+        },
+      ]}
     >
       <View
         style={{

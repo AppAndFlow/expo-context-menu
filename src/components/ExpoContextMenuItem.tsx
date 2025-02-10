@@ -8,7 +8,7 @@ interface ContextMenuItemProps {
   destructive?: boolean;
 }
 
-export const ContextMenuItem: React.FC<ContextMenuItemProps> = ({
+export const ExpoContextMenuItem: React.FC<ContextMenuItemProps> = ({
   onPress,
   title,
   destructive = false,

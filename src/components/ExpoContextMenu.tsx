@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { Fragment, useRef, useState } from 'react';
 import {
   Pressable,
   StyleSheet,
@@ -21,6 +21,7 @@ import Animated, {
 import Portal from './Portal';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import * as Haptics from 'expo-haptics';
+import { ExpoContextMenuItem } from './ExpoContextMenuItem';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
@@ -28,11 +29,17 @@ const AnimatedBlurView = Animated.createAnimatedComponent(BlurView);
 
 interface ContextMenuProps {
   children: React.ReactNode;
-  menuItems?: React.ReactNode;
+  menuItems?: {
+    title: string;
+    icon?: React.ReactElement;
+    onPress: () => void;
+    destructive?: boolean;
+  }[];
+  renderMenu?: () => React.ReactNode;
   isFullScreen?: boolean;
 }
 
-export const ContextMenu: React.FC<ContextMenuProps> = ({
+export const ExpoContextMenu: React.FC<ContextMenuProps> = ({
   children,
   menuItems,
   isFullScreen,
@@ -69,8 +76,7 @@ export const ContextMenu: React.FC<ContextMenuProps> = ({
     childrenLayout.y + childrenLayout.height + 20 + menuLayout.height <
     SCREEN_HEIGHT - insets.bottom;
 
-  const hasHorizontalPlace =
-    childrenLayout.x + menuLayout.height < SCREEN_WIDTH;
+  const hasHorizontalPlace = childrenLayout.x + menuLayout.width < SCREEN_WIDTH;
 
   const onChildrenLayout = () => {
     childrenRef.current?.measureInWindow((x, y, width, height) => {
@@ -79,7 +85,7 @@ export const ContextMenu: React.FC<ContextMenuProps> = ({
   };
 
   const onMenuLayout = (event: LayoutChangeEvent) => {
-    if (menuLayout.width === event.nativeEvent.layout.width) {
+    if (menuLayout.width !== 0) {
       return;
     }
     setMenuLayout({
@@ -297,13 +303,29 @@ export const ContextMenu: React.FC<ContextMenuProps> = ({
                         ? childrenLayout.y + childrenLayout.height + 20
                         : childrenLayout.y - childrenLayout.height - 20,
                     left: hasHorizontalPlace ? childrenLayout.x : undefined,
-                    right: !hasHorizontalPlace
-                      ? SCREEN_WIDTH - childrenLayout.x - childrenLayout.width
-                      : undefined,
+                    right:
+                      !hasHorizontalPlace || isFullScreen
+                        ? SCREEN_WIDTH - childrenLayout.x - childrenLayout.width
+                        : undefined,
                   },
                 ]}
               >
-                {menuItems}
+                {menuItems?.map((item, index) => {
+                  return (
+                    <Fragment key={item.title + index}>
+                      <ExpoContextMenuItem {...item} />
+                      {index !== menuItems.length - 1 && (
+                        <View
+                          style={{
+                            height: 1,
+                            backgroundColor: '#E6E9EB',
+                            width: '100%',
+                          }}
+                        />
+                      )}
+                    </Fragment>
+                  );
+                })}
               </Animated.View>
             </AnimatedBlurView>
           </Pressable>
