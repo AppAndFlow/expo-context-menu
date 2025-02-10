@@ -38,6 +38,7 @@ const PortalProvider: React.FC<PortalProviderProps> = ({ children }) => {
             position: 'absolute',
             pointerEvents: 'box-none',
           }}
+          collapsable={false}
         >
           {Object.entries(components).map(([_name, Component]) => Component)}
         </View>
