@@ -30,7 +30,14 @@ const PortalProvider: React.FC<PortalProviderProps> = ({ children }) => {
       <View style={{ flex: 1 }}>
         <React.Fragment>{children}</React.Fragment>
         <View
-          style={{ top: 0, left: 0, right: 0, bottom: 0, position: 'absolute' }}
+          style={{
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            position: 'absolute',
+            pointerEvents: 'box-none',
+          }}
         >
           {Object.entries(components).map(([_name, Component]) => Component)}
         </View>
