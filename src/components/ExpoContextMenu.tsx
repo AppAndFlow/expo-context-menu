@@ -37,12 +37,14 @@ interface ContextMenuProps {
   }[];
   renderMenu?: () => React.ReactNode;
   isFullScreen?: boolean;
+  onPress?: () => void;
 }
 
 export const ExpoContextMenu: React.FC<ContextMenuProps> = ({
   children,
   menuItems,
   isFullScreen,
+  onPress,
 }) => {
   const childrenRef = useRef<View>(null);
   const insets = useSafeAreaInsets();
@@ -255,7 +257,11 @@ export const ExpoContextMenu: React.FC<ContextMenuProps> = ({
         onLayout={onChildrenLayout}
         ref={childrenRef}
       >
-        <Pressable delayLongPress={100} onLongPress={onLongPress}>
+        <Pressable
+          delayLongPress={100}
+          onLongPress={onLongPress}
+          onPress={onPress}
+        >
           {children}
         </Pressable>
       </Animated.View>
