@@ -120,15 +120,28 @@ function SettingsScreen() {
 
 const Tab = createBottomTabNavigator();
 
+const RootNavigator = createNativeStackNavigator();
+
+const TabNavigator = () => {
+  return (
+    <Tab.Navigator>
+      <Tab.Screen name="Home" component={HomeStack} />
+      <Tab.Screen name="Settings" component={SettingsScreen} />
+    </Tab.Navigator>
+  );
+};
+
 export default function App() {
   return (
     <SafeAreaProvider>
       <ExpoContextMenuProvider>
         <NavigationContainer>
-          <Tab.Navigator>
-            <Tab.Screen name="Home" component={HomeStack} />
-            <Tab.Screen name="Settings" component={SettingsScreen} />
-          </Tab.Navigator>
+          <RootNavigator.Navigator screenOptions={{ headerShown: false }}>
+            <RootNavigator.Screen
+              name="TabNavigator"
+              component={TabNavigator}
+            />
+          </RootNavigator.Navigator>
         </NavigationContainer>
       </ExpoContextMenuProvider>
     </SafeAreaProvider>

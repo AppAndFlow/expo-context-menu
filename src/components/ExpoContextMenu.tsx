@@ -18,11 +18,11 @@ import Animated, {
   Easing,
   ReduceMotion,
 } from 'react-native-reanimated';
-import Portal from './Portal';
+// import Portal from './Portal';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import * as Haptics from 'expo-haptics';
 import { ExpoContextMenuItem } from './ExpoContextMenuItem';
-// import { Portal } from 'react-native-portalize';
+import { Portal } from 'react-native-portalize';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
@@ -267,7 +267,7 @@ export const ExpoContextMenu: React.FC<ContextMenuProps> = ({
         </Pressable>
       </Animated.View>
 
-      <Portal name="context-menu">
+      <Portal>
         <Animated.View
           style={[
             StyleSheet.absoluteFill,
