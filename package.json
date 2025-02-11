@@ -1,6 +1,6 @@
 {
   "name": "@appandflow/expo-context-menu",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "description": "Context Menu For Expo",
   "source": "./src/index.tsx",
   "main": "./lib/commonjs/index.js",
@@ -94,7 +94,7 @@
     "react-native": "*",
     "react-native-reanimated": ">=3",
     "react-native-safe-area-context": "*",
-    "react-native-screens": ">=4"
+    "react-native-screens": "*"
   },
   "workspaces": [
     "example"
