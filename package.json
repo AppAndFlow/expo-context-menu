@@ -93,7 +93,8 @@
     "react": "*",
     "react-native": "*",
     "react-native-reanimated": ">=3",
-    "react-native-safe-area-context": "*"
+    "react-native-safe-area-context": "*",
+    "react-native-screens": ">=4"
   },
   "workspaces": [
     "example"
@@ -193,7 +194,9 @@
   "dependencies": {
     "expo-blur": "*",
     "expo-haptics": "^14.0.1",
+    "react-native-portalize": "^1.0.7",
     "react-native-reanimated": ">=3",
-    "react-native-safe-area-context": "*"
+    "react-native-safe-area-context": "*",
+    "react-native-screens": "^4.6.0"
   }
 }

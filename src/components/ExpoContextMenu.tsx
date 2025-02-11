@@ -22,6 +22,7 @@ import Portal from './Portal';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import * as Haptics from 'expo-haptics';
 import { ExpoContextMenuItem } from './ExpoContextMenuItem';
+// import { Portal } from 'react-native-portalize';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
@@ -230,9 +231,9 @@ export const ExpoContextMenu: React.FC<ContextMenuProps> = ({
     return {
       opacity: menuOpacity.value,
       transform: [
-        { scale: scale.value },
         { translateY: translateY.value },
         { translateX: translateX.value },
+        { scale: scale.value },
       ],
     };
   });
@@ -273,7 +274,6 @@ export const ExpoContextMenu: React.FC<ContextMenuProps> = ({
             {
               backgroundColor: 'transparent',
               pointerEvents: show ? 'auto' : 'none',
-              zIndex: 9999,
             },
           ]}
         >

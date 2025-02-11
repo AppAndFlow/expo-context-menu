@@ -1,3 +1,4 @@
+import './gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import {
   ExpoContextMenu,
@@ -5,6 +6,9 @@ import {
 } from '@appandflow/expo-context-menu';
 import { View, StyleSheet, Text } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import { NavigationContainer } from '@react-navigation/native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 const Cell = ({
   backgroundColor,
@@ -71,30 +75,61 @@ const Cell = ({
   );
 };
 
+const HomeScreen = () => {
+  return (
+    <View style={styles.container}>
+      <View style={styles.row}>
+        <Cell backgroundColor="red" label="A" />
+        <Cell backgroundColor="blue" label="B" />
+      </View>
+      <View style={styles.row}>
+        <Cell backgroundColor="green" label="C" />
+        <Cell backgroundColor="purple" label="D" />
+      </View>
+
+      <View style={styles.row}>
+        <Cell backgroundColor="red" label="A" />
+        <Cell backgroundColor="blue" label="B" />
+      </View>
+
+      <View style={styles.row}>
+        <Cell backgroundColor="green" label="C" />
+        <Cell backgroundColor="purple" label="D" />
+      </View>
+    </View>
+  );
+};
+
+const HomeNavigator = createNativeStackNavigator();
+
+const HomeStack = () => {
+  return (
+    <HomeNavigator.Navigator screenOptions={{ headerShown: false }}>
+      <HomeNavigator.Screen name="HomeScreen" component={HomeScreen} />
+    </HomeNavigator.Navigator>
+  );
+};
+
+function SettingsScreen() {
+  return (
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <Text>Settings!</Text>
+    </View>
+  );
+}
+
+const Tab = createBottomTabNavigator();
+
 export default function App() {
   return (
     <SafeAreaProvider>
       <ExpoContextMenuProvider>
-        <View style={styles.container}>
-          <View style={styles.row}>
-            <Cell backgroundColor="red" label="A" />
-            <Cell backgroundColor="blue" label="B" />
-          </View>
-          <View style={styles.row}>
-            <Cell backgroundColor="green" label="C" />
-            <Cell backgroundColor="purple" label="D" />
-          </View>
-
-          <View style={styles.row}>
-            <Cell backgroundColor="red" label="A" />
-            <Cell backgroundColor="blue" label="B" />
-          </View>
-
-          <View style={styles.row}>
-            <Cell backgroundColor="green" label="C" />
-            <Cell backgroundColor="purple" label="D" />
-          </View>
-        </View>
+        <NavigationContainer>
+          <Tab.Navigator>
+            <Tab.Screen name="Home" component={HomeStack} />
+            <Tab.Screen name="Settings" component={SettingsScreen} />
+          </Tab.Navigator>
+        </NavigationContainer>
       </ExpoContextMenuProvider>
     </SafeAreaProvider>
   );
