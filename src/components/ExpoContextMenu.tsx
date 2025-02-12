@@ -1,3 +1,5 @@
+import { BlurView } from 'expo-blur';
+import * as Haptics from 'expo-haptics';
 import React, { Fragment, useRef, useState } from 'react';
 import {
   Pressable,
@@ -6,7 +8,7 @@ import {
   View,
   type LayoutChangeEvent,
 } from 'react-native';
-import { BlurView } from 'expo-blur';
+import { Portal } from 'react-native-portalize';
 import Animated, {
   withSpring,
   useAnimatedStyle,
@@ -17,12 +19,12 @@ import Animated, {
   withDelay,
   Easing,
   ReduceMotion,
+  useAnimatedProps,
 } from 'react-native-reanimated';
-// import Portal from './Portal';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import * as Haptics from 'expo-haptics';
+import { FullWindowOverlay } from 'react-native-screens';
+
 import { ExpoContextMenuItem } from './ExpoContextMenuItem';
-import { Portal } from 'react-native-portalize';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
@@ -82,9 +84,11 @@ export const ExpoContextMenu: React.FC<ContextMenuProps> = ({
   const hasHorizontalPlace = childrenLayout.x + menuLayout.width < SCREEN_WIDTH;
 
   const onChildrenLayout = () => {
-    childrenRef.current?.measureInWindow((x, y, width, height) => {
-      setChildrenLayout({ x, y, width, height });
-    });
+    if (childrenLayout.height === 0) {
+      childrenRef.current?.measureInWindow((x, y, width, height) => {
+        setChildrenLayout({ x, y, width, height });
+      });
+    }
   };
 
   const onMenuLayout = (event: LayoutChangeEvent) => {
@@ -103,6 +107,8 @@ export const ExpoContextMenu: React.FC<ContextMenuProps> = ({
     const ANIM_DURATION = isFullScreen ? 200 : 50;
     await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
     await new Promise((resolve) => setTimeout(resolve, 150));
+
+    setShow(true);
 
     const springOpts = isFullScreen
       ? {
@@ -124,9 +130,10 @@ export const ExpoContextMenu: React.FC<ContextMenuProps> = ({
           reduceMotion: ReduceMotion.Never,
         };
 
-    setShow(true);
     scale.value = withSpring(1, springOpts);
+
     opacity.value = withTiming(1, { duration: ANIM_DURATION });
+    console.log('hello opacity');
     menuOpacity.value = withTiming(1, { duration: ANIM_DURATION / 2 });
 
     if (isFullScreen) {
@@ -224,6 +231,13 @@ export const ExpoContextMenu: React.FC<ContextMenuProps> = ({
   const animatedBlurStyle = useAnimatedStyle(() => {
     return {
       opacity: opacity.value,
+      backgroundColor: `rgba(0, 0, 0, ${opacity.value * 0.2})`,
+    };
+  });
+
+  const animatedBlurProps = useAnimatedProps(() => {
+    return {
+      intensity: withTiming(30 * opacity.value),
     };
   });
 
@@ -268,75 +282,80 @@ export const ExpoContextMenu: React.FC<ContextMenuProps> = ({
       </Animated.View>
 
       <Portal>
-        <Animated.View
-          style={[
-            StyleSheet.absoluteFill,
-            {
-              backgroundColor: 'transparent',
-              pointerEvents: show ? 'auto' : 'none',
-            },
-          ]}
-        >
-          <Pressable style={styles.overlay} onPress={hideMenu}>
-            <AnimatedBlurView
-              style={[styles.blurView, animatedBlurStyle]}
-              intensity={30}
-              tint="regular"
-            >
-              <Animated.View
-                style={[
-                  animatedChildrenStyle,
-                  {
-                    overflow: 'hidden',
-                    position: 'absolute',
-                    left: childrenLayout.x,
-                    top: childrenLayout.y,
-                    width: childrenLayout.width,
-                    height: childrenLayout.height,
-                  },
-                ]}
+        <FullWindowOverlay>
+          <Animated.View
+            style={[
+              StyleSheet.absoluteFill,
+              {
+                backgroundColor: 'transparent',
+                pointerEvents: show ? 'auto' : 'none',
+              },
+              animatedBlurStyle,
+            ]}
+          >
+            <Pressable style={styles.overlay} onPress={hideMenu}>
+              <AnimatedBlurView
+                style={[styles.blurView]}
+                tint="regular"
+                animatedProps={animatedBlurProps}
               >
-                {children}
-              </Animated.View>
-              <Animated.View
-                onLayout={onMenuLayout}
-                style={[
-                  styles.menuContainer,
-                  animatedMenuStyle,
-                  {
-                    position: 'absolute',
-                    top:
-                      hasVerticalPlace || isFullScreen
-                        ? childrenLayout.y + childrenLayout.height + 20
-                        : childrenLayout.y - childrenLayout.height - 20,
-                    left: hasHorizontalPlace ? childrenLayout.x : undefined,
-                    right:
-                      !hasHorizontalPlace || isFullScreen
-                        ? SCREEN_WIDTH - childrenLayout.x - childrenLayout.width
-                        : undefined,
-                  },
-                ]}
-              >
-                {menuItems?.map((item, index) => {
-                  return (
-                    <Fragment key={item.title + index}>
-                      <ExpoContextMenuItem {...item} />
-                      {index !== menuItems.length - 1 && (
-                        <View
-                          style={{
-                            height: 1,
-                            backgroundColor: '#E6E9EB',
-                            width: '100%',
-                          }}
-                        />
-                      )}
-                    </Fragment>
-                  );
-                })}
-              </Animated.View>
-            </AnimatedBlurView>
-          </Pressable>
-        </Animated.View>
+                <Animated.View
+                  style={[
+                    animatedChildrenStyle,
+                    {
+                      overflow: 'hidden',
+                      position: 'absolute',
+                      left: childrenLayout.x,
+                      right:
+                        SCREEN_WIDTH - childrenLayout.x - childrenLayout.width,
+                      top: childrenLayout.y,
+                    },
+                  ]}
+                >
+                  {children}
+                </Animated.View>
+                <Animated.View
+                  onLayout={onMenuLayout}
+                  style={[
+                    styles.menuContainer,
+                    animatedMenuStyle,
+                    {
+                      position: 'absolute',
+                      top:
+                        hasVerticalPlace || isFullScreen
+                          ? childrenLayout.y + childrenLayout.height + 20
+                          : childrenLayout.y - childrenLayout.height - 20,
+                      left: hasHorizontalPlace ? childrenLayout.x : undefined,
+                      right:
+                        !hasHorizontalPlace || isFullScreen
+                          ? SCREEN_WIDTH -
+                            childrenLayout.x -
+                            childrenLayout.width
+                          : undefined,
+                    },
+                  ]}
+                >
+                  {menuItems?.map((item, index) => {
+                    return (
+                      <Fragment key={item.title + index}>
+                        <ExpoContextMenuItem {...item} />
+                        {index !== menuItems.length - 1 && (
+                          <View
+                            style={{
+                              height: 1,
+                              backgroundColor: '#E6E9EB',
+                              width: '100%',
+                            }}
+                          />
+                        )}
+                      </Fragment>
+                    );
+                  })}
+                </Animated.View>
+              </AnimatedBlurView>
+            </Pressable>
+          </Animated.View>
+        </FullWindowOverlay>
       </Portal>
     </>
   );
@@ -354,7 +373,11 @@ const styles = StyleSheet.create({
     width: SCREEN_WIDTH,
   },
   blurView: {
-    ...StyleSheet.absoluteFillObject,
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
     alignItems: 'center',
     justifyContent: 'center',
     height: SCREEN_HEIGHT,
