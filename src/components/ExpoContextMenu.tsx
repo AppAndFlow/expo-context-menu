@@ -9,6 +9,7 @@ import {
   type LayoutChangeEvent,
 } from 'react-native';
 import { Portal } from 'react-native-portalize';
+import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Animated, {
   withSpring,
   useAnimatedStyle,
@@ -86,7 +87,12 @@ export const ExpoContextMenu: React.FC<ContextMenuProps> = ({
   const onChildrenLayout = () => {
     if (childrenLayout.height === 0) {
       childrenRef.current?.measureInWindow((x, y, width, height) => {
-        setChildrenLayout({ x, y, width, height });
+        setChildrenLayout({
+          x,
+          y,
+          width,
+          height,
+        });
       });
     }
   };
@@ -104,6 +110,15 @@ export const ExpoContextMenu: React.FC<ContextMenuProps> = ({
   };
 
   const onLongPress = async () => {
+    childrenRef.current?.measureInWindow((x, y, width, height) => {
+      setChildrenLayout({
+        x,
+        y,
+        width,
+        height,
+      });
+    });
+
     const ANIM_DURATION = isFullScreen ? 200 : 50;
     await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
     await new Promise((resolve) => setTimeout(resolve, 150));
@@ -133,7 +148,6 @@ export const ExpoContextMenu: React.FC<ContextMenuProps> = ({
     scale.value = withSpring(1, springOpts);
 
     opacity.value = withTiming(1, { duration: ANIM_DURATION });
-    console.log('hello opacity');
     menuOpacity.value = withTiming(1, { duration: ANIM_DURATION / 2 });
 
     if (isFullScreen) {
@@ -265,21 +279,42 @@ export const ExpoContextMenu: React.FC<ContextMenuProps> = ({
     opacity: realChildrenOpacity.value,
   }));
 
+  const longPressGesture = Gesture.LongPress()
+    .minDuration(150) // Increase duration to better distinguish from scroll
+    .maxDistance(15) // Increase max distance slightly
+    .shouldCancelWhenOutside(true)
+    .onStart(() => {
+      runOnJS(onLongPress)();
+    });
+
+  // Add a simultaneous gesture handler
+  const simultaneousGestures = Gesture.Simultaneous(
+    Gesture.Pan()
+      .activeOffsetY(15)
+      .onStart(() => {
+        // Instead of trying to cancel, we'll use a state variable
+        runOnJS(setShow)(false);
+      }),
+    longPressGesture
+  );
+
   return (
     <>
-      <Animated.View
-        style={animatedRealChildrenStyle}
-        onLayout={onChildrenLayout}
-        ref={childrenRef}
-      >
-        <Pressable
-          delayLongPress={100}
-          onLongPress={onLongPress}
-          onPress={onPress}
+      <GestureDetector gesture={simultaneousGestures}>
+        <Animated.View
+          style={animatedRealChildrenStyle}
+          ref={childrenRef}
+          onLayout={onChildrenLayout}
         >
-          {children}
-        </Pressable>
-      </Animated.View>
+          <Pressable
+            // delayLongPress={100}
+            // onLongPress={onLongPress}
+            onPress={onPress}
+          >
+            {children}
+          </Pressable>
+        </Animated.View>
+      </GestureDetector>
 
       <Portal>
         <FullWindowOverlay>

@@ -1,4 +1,4 @@
-import './gesture-handler';
+// import './gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import {
   ExpoContextMenu,
@@ -9,6 +9,10 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import Animated, {
+  useAnimatedScrollHandler,
+  useSharedValue,
+} from 'react-native-reanimated';
 
 const Cell = ({
   backgroundColor,
@@ -19,7 +23,7 @@ const Cell = ({
 }) => {
   return (
     <ExpoContextMenu
-      isFullScreen
+      // isFullScreen
       menuItems={[
         {
           title: 'Share',
@@ -76,8 +80,18 @@ const Cell = ({
 };
 
 const HomeScreen = () => {
+  const scrollY = useSharedValue(0);
+
   return (
-    <View style={styles.container}>
+    <Animated.ScrollView
+      contentContainerStyle={styles.container}
+      onScroll={useAnimatedScrollHandler({
+        onScroll: (event) => {
+          scrollY.value = event.contentOffset.y;
+        },
+      })}
+      scrollEventThrottle={16}
+    >
       <View style={styles.row}>
         <Cell backgroundColor="red" label="A" />
         <Cell backgroundColor="blue" label="B" />
@@ -96,7 +110,26 @@ const HomeScreen = () => {
         <Cell backgroundColor="green" label="C" />
         <Cell backgroundColor="purple" label="D" />
       </View>
-    </View>
+
+      <View style={styles.row}>
+        <Cell backgroundColor="red" label="A" />
+        <Cell backgroundColor="blue" label="B" />
+      </View>
+      <View style={styles.row}>
+        <Cell backgroundColor="green" label="C" />
+        <Cell backgroundColor="purple" label="D" />
+      </View>
+
+      <View style={styles.row}>
+        <Cell backgroundColor="red" label="A" />
+        <Cell backgroundColor="blue" label="B" />
+      </View>
+
+      <View style={styles.row}>
+        <Cell backgroundColor="green" label="C" />
+        <Cell backgroundColor="purple" label="D" />
+      </View>
+    </Animated.ScrollView>
   );
 };
 
@@ -156,7 +189,6 @@ const styles = StyleSheet.create({
   },
   container: {
     padding: 16,
-    flex: 1,
     alignItems: 'flex-start',
     justifyContent: 'center',
     gap: 8,
