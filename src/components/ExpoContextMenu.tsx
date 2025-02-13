@@ -284,6 +284,7 @@ export const ExpoContextMenu: React.FC<ContextMenuProps> = ({
     .maxDistance(15) // Increase max distance slightly
     .shouldCancelWhenOutside(true)
     .onStart(() => {
+      'worklet';
       runOnJS(onLongPress)();
     });
 
@@ -292,6 +293,7 @@ export const ExpoContextMenu: React.FC<ContextMenuProps> = ({
     Gesture.Pan()
       .activeOffsetY(15)
       .onStart(() => {
+        'worklet';
         // Instead of trying to cancel, we'll use a state variable
         runOnJS(setShow)(false);
       }),
@@ -359,7 +361,7 @@ export const ExpoContextMenu: React.FC<ContextMenuProps> = ({
                       top:
                         hasVerticalPlace || isFullScreen
                           ? childrenLayout.y + childrenLayout.height + 20
-                          : childrenLayout.y - childrenLayout.height - 20,
+                          : childrenLayout.y - menuLayout.height - 20,
                       left: hasHorizontalPlace ? childrenLayout.x : undefined,
                       right:
                         !hasHorizontalPlace || isFullScreen
