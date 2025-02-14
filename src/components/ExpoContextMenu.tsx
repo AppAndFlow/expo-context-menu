@@ -7,6 +7,7 @@ import {
   Dimensions,
   View,
   type LayoutChangeEvent,
+  Platform,
 } from 'react-native';
 import { Portal } from 'react-native-portalize';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
@@ -30,6 +31,8 @@ import { ExpoContextMenuItem } from './ExpoContextMenuItem';
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
 const AnimatedBlurView = Animated.createAnimatedComponent(BlurView);
+
+const WindowOverlay = Platform.OS === 'android' ? View : FullWindowOverlay;
 
 interface ContextMenuProps {
   children: React.ReactNode;
@@ -188,7 +191,7 @@ export const ExpoContextMenu: React.FC<ContextMenuProps> = ({
       translateY.value = withSpring(0, springOpts);
       childrenScale.value = withSequence(
         withSpring(1.02, springOpts),
-        withSpring(0.97, springOpts)
+        withSpring(Platform.OS === 'android' ? 1 : 0.97, springOpts)
       );
     }
 
@@ -269,7 +272,9 @@ export const ExpoContextMenu: React.FC<ContextMenuProps> = ({
   const animatedChildrenStyle = useAnimatedStyle(() => ({
     transform: [
       { translateX: childrenTranslateX.value },
-      { translateY: childrenTranslateY.value },
+      {
+        translateY: childrenTranslateY.value,
+      },
       { scale: childrenScale.value },
     ],
     opacity: childrenOpacity.value,
@@ -319,7 +324,7 @@ export const ExpoContextMenu: React.FC<ContextMenuProps> = ({
       </GestureDetector>
 
       <Portal>
-        <FullWindowOverlay>
+        <WindowOverlay>
           <Animated.View
             style={[
               StyleSheet.absoluteFill,
@@ -333,8 +338,20 @@ export const ExpoContextMenu: React.FC<ContextMenuProps> = ({
             <Pressable style={styles.overlay} onPress={hideMenu}>
               <AnimatedBlurView
                 style={[styles.blurView]}
-                tint="regular"
-                animatedProps={animatedBlurProps}
+                tint={
+                  Platform.OS === 'android'
+                    ? 'systemThickMaterialDark'
+                    : 'regular'
+                }
+                {...(Platform.OS === 'android'
+                  ? {
+                      intensity: 10,
+                    }
+                  : {
+                      animatedProps: animatedBlurProps,
+                    })}
+                experimentalBlurMethod="dimezisBlurView"
+                blurReductionFactor={2}
               >
                 <Animated.View
                   style={[
@@ -392,7 +409,7 @@ export const ExpoContextMenu: React.FC<ContextMenuProps> = ({
               </AnimatedBlurView>
             </Pressable>
           </Animated.View>
-        </FullWindowOverlay>
+        </WindowOverlay>
       </Portal>
     </>
   );
