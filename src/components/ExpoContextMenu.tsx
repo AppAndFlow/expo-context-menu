@@ -47,6 +47,8 @@ interface ContextMenuProps {
   onPress?: () => void;
 }
 
+const CHILDREN_SCALE = 0.97;
+
 export const ExpoContextMenu: React.FC<ContextMenuProps> = ({
   children,
   menuItems,
@@ -191,7 +193,7 @@ export const ExpoContextMenu: React.FC<ContextMenuProps> = ({
       translateY.value = withSpring(0, springOpts);
       childrenScale.value = withSequence(
         withSpring(1.02, springOpts),
-        withSpring(Platform.OS === 'android' ? 1 : 0.97, springOpts)
+        withSpring(Platform.OS === 'android' ? 1 : CHILDREN_SCALE, springOpts)
       );
     }
 
@@ -379,7 +381,9 @@ export const ExpoContextMenu: React.FC<ContextMenuProps> = ({
                         hasVerticalPlace || isFullScreen
                           ? childrenLayout.y + childrenLayout.height + 20
                           : childrenLayout.y - menuLayout.height - 20,
-                      left: hasHorizontalPlace ? childrenLayout.x : undefined,
+                      left: hasHorizontalPlace
+                        ? childrenLayout.x * CHILDREN_SCALE
+                        : undefined,
                       right:
                         !hasHorizontalPlace || isFullScreen
                           ? SCREEN_WIDTH -
