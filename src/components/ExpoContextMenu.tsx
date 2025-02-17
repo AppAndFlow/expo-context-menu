@@ -382,7 +382,10 @@ export const ExpoContextMenu: React.FC<ContextMenuProps> = ({
                           ? childrenLayout.y + childrenLayout.height + 20
                           : childrenLayout.y - menuLayout.height - 20,
                       left: hasHorizontalPlace
-                        ? childrenLayout.x * CHILDREN_SCALE
+                        ? Platform.OS === 'android'
+                          ? childrenLayout.x
+                          : childrenLayout.x +
+                            ((1 - CHILDREN_SCALE) / 2) * childrenLayout.width
                         : undefined,
                       right:
                         !hasHorizontalPlace || isFullScreen
