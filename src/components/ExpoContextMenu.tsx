@@ -256,7 +256,9 @@ export const ExpoContextMenu: React.FC<ContextMenuProps> = ({
 
   const animatedBlurProps = useAnimatedProps(() => {
     return {
-      intensity: withTiming(30 * opacity.value),
+      intensity: withTiming(30 * opacity.value, {
+        duration: 100,
+      }),
     };
   });
 
