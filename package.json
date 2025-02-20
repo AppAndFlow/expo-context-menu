@@ -1,6 +1,6 @@
 {
   "name": "@appandflow/expo-context-menu",
-  "version": "0.1.15",
+  "version": "0.1.16",
   "description": "Context Menu For Expo",
   "source": "./src/index.tsx",
   "main": "./lib/commonjs/index.js",

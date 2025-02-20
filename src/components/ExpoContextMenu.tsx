@@ -54,6 +54,7 @@ export const ExpoContextMenu: React.FC<ContextMenuProps> = ({
   menuItems,
   isFullScreen,
   onPress,
+  renderMenu,
 }) => {
   const childrenRef = useRef<View>(null);
   const insets = useSafeAreaInsets();
@@ -398,22 +399,24 @@ export const ExpoContextMenu: React.FC<ContextMenuProps> = ({
                     },
                   ]}
                 >
-                  {menuItems?.map((item, index) => {
-                    return (
-                      <Fragment key={item.title + index}>
-                        <ExpoContextMenuItem {...item} />
-                        {index !== menuItems.length - 1 && (
-                          <View
-                            style={{
-                              height: 1,
-                              backgroundColor: '#E6E9EB',
-                              width: '100%',
-                            }}
-                          />
-                        )}
-                      </Fragment>
-                    );
-                  })}
+                  {typeof renderMenu === 'function'
+                    ? renderMenu()
+                    : menuItems?.map((item, index) => {
+                        return (
+                          <Fragment key={item.title + index}>
+                            <ExpoContextMenuItem {...item} />
+                            {index !== menuItems.length - 1 && (
+                              <View
+                                style={{
+                                  height: 1,
+                                  backgroundColor: '#E6E9EB',
+                                  width: '100%',
+                                }}
+                              />
+                            )}
+                          </Fragment>
+                        );
+                      })}
                 </Animated.View>
               </AnimatedBlurView>
             </Pressable>
