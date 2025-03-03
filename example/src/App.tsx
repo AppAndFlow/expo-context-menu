@@ -24,6 +24,10 @@ const Cell = ({
   return (
     <ExpoContextMenu
       // isFullScreen
+      onLongPressStart={() => console.log('Long Press Start')}
+      onLongPressEnd={() => console.log('Long Press End')}
+      onMenuOpen={() => console.log('Menu Open')}
+      onMenuClose={() => console.log('Menu Close')}
       menuItems={[
         {
           title: 'Share',

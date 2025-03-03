@@ -1,6 +1,6 @@
 import { BlurView } from 'expo-blur';
 import * as Haptics from 'expo-haptics';
-import React, { Fragment, useRef, useState } from 'react';
+import React, { Fragment, useEffect, useRef, useState } from 'react';
 import {
   Pressable,
   StyleSheet,
@@ -45,6 +45,12 @@ interface ContextMenuProps {
   renderMenu?: () => React.ReactNode;
   isFullScreen?: boolean;
   onPress?: () => void;
+
+  onLongPressStart?: () => void;
+  onLongPressEnd?: () => void;
+
+  onMenuOpen?: () => void;
+  onMenuClose?: () => void;
 }
 
 const CHILDREN_SCALE = 0.97;
@@ -55,6 +61,10 @@ export const ExpoContextMenu: React.FC<ContextMenuProps> = ({
   isFullScreen,
   onPress,
   renderMenu,
+  onLongPressEnd,
+  onLongPressStart,
+  onMenuOpen,
+  onMenuClose,
 }) => {
   const childrenRef = useRef<View>(null);
   const insets = useSafeAreaInsets();
@@ -72,6 +82,15 @@ export const ExpoContextMenu: React.FC<ContextMenuProps> = ({
   });
 
   const [show, setShow] = useState(false);
+
+  useEffect(() => {
+    if (show) {
+      onMenuOpen?.();
+    } else {
+      onMenuClose?.();
+    }
+  }, [show, onMenuOpen, onMenuClose]);
+
   const scale = useSharedValue(0);
   const opacity = useSharedValue(0);
   const menuOpacity = useSharedValue(0);
@@ -296,6 +315,16 @@ export const ExpoContextMenu: React.FC<ContextMenuProps> = ({
     .onStart(() => {
       'worklet';
       runOnJS(onLongPress)();
+
+      if (onLongPressStart) {
+        runOnJS(onLongPressStart)();
+      }
+    })
+    .onEnd(() => {
+      'worklet';
+      if (onLongPressEnd) {
+        runOnJS(onLongPressEnd)();
+      }
     });
 
   // Add a simultaneous gesture handler
