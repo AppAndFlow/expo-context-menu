@@ -2,26 +2,26 @@ import { BlurView } from 'expo-blur';
 import * as Haptics from 'expo-haptics';
 import React, { Fragment, useEffect, useRef, useState } from 'react';
 import {
+  Dimensions,
+  Platform,
   Pressable,
   StyleSheet,
-  Dimensions,
   View,
   type LayoutChangeEvent,
-  Platform,
 } from 'react-native';
-import { Portal } from 'react-native-portalize';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
+import { Portal } from 'react-native-portalize';
 import Animated, {
-  withSpring,
-  useAnimatedStyle,
-  useSharedValue,
-  withTiming,
-  runOnJS,
-  withSequence,
-  withDelay,
   Easing,
   ReduceMotion,
+  runOnJS,
   useAnimatedProps,
+  useAnimatedStyle,
+  useSharedValue,
+  withDelay,
+  withSequence,
+  withSpring,
+  withTiming,
 } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { FullWindowOverlay } from 'react-native-screens';
@@ -51,9 +51,9 @@ interface ContextMenuProps {
 
   onMenuOpen?: () => void;
   onMenuClose?: () => void;
-}
 
-const CHILDREN_SCALE = 0.97;
+  itemScaleOnMenuOpen?: number;
+}
 
 export const ExpoContextMenu: React.FC<ContextMenuProps> = ({
   children,
@@ -65,6 +65,7 @@ export const ExpoContextMenu: React.FC<ContextMenuProps> = ({
   onLongPressStart,
   onMenuOpen,
   onMenuClose,
+  itemScaleOnMenuOpen = 0.97,
 }) => {
   const childrenRef = useRef<View>(null);
   const insets = useSafeAreaInsets();
@@ -213,7 +214,10 @@ export const ExpoContextMenu: React.FC<ContextMenuProps> = ({
       translateY.value = withSpring(0, springOpts);
       childrenScale.value = withSequence(
         withSpring(1.02, springOpts),
-        withSpring(Platform.OS === 'android' ? 1 : CHILDREN_SCALE, springOpts)
+        withSpring(
+          Platform.OS === 'android' ? 1 : itemScaleOnMenuOpen,
+          springOpts
+        )
       );
     }
 
@@ -417,7 +421,8 @@ export const ExpoContextMenu: React.FC<ContextMenuProps> = ({
                         ? Platform.OS === 'android'
                           ? childrenLayout.x
                           : childrenLayout.x +
-                            ((1 - CHILDREN_SCALE) / 2) * childrenLayout.width
+                            ((1 - itemScaleOnMenuOpen) / 2) *
+                              childrenLayout.width
                         : undefined,
                       right:
                         !hasHorizontalPlace || isFullScreen
