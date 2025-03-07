@@ -44,6 +44,56 @@ import { ExpoContextMenu } from '@appandflow/expo-context-menu';
 </ExpoContextMenu>
 ```
 
+## Props
+
+#### menuItems
+
+the items you pass when them menu get show
+
+```tsx
+{
+  title: string;
+  icon?: React.ReactElement;
+  onPress: () => void;
+  destructive?: boolean;
+}[];
+```
+
+#### renderMenu | optional
+
+if you want to overide the menu component you can pass a component
+
+
+#### isFullScreen | optional
+
+full screen layout animation vs the default one of just adding blur
+
+#### onPress
+
+the onPress event pass to the children
+
+#### onLongPressStart | optional
+
+callback when the long press start
+
+#### onLongPressEnd | optional
+
+callback when the long press end
+
+#### onMenuOpen | optional
+
+callback when the meny open
+
+#### onMenuClose | optional
+
+callback when the menu close
+
+#### itemScaleOnMenuOpen | optional
+
+the number as the scaling value of the item when the menu open
+
+default: 0.97
+
 ## Contributing
 
 See the [contributing guide](CONTRIBUTING.md) to learn how to contribute to the repository and the development workflow.

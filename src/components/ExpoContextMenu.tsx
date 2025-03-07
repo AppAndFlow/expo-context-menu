@@ -351,13 +351,7 @@ export const ExpoContextMenu: React.FC<ContextMenuProps> = ({
           ref={childrenRef}
           onLayout={onChildrenLayout}
         >
-          <Pressable
-            // delayLongPress={100}
-            // onLongPress={onLongPress}
-            onPress={onPress}
-          >
-            {children}
-          </Pressable>
+          <Pressable onPress={onPress}>{children}</Pressable>
         </Animated.View>
       </GestureDetector>
 
