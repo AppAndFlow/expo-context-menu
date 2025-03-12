@@ -1,3 +1,7 @@
+![contextmenubanner](https://github.com/user-attachments/assets/e16da645-d2b1-4a98-8dad-b30cbfb202cf)
+### About
+App & Flow is a Montreal-based React Native engineering and consulting studio. We partner with the world’s top companies and are recommended by [Expo](https://expo.dev/consultants). Need a hand? Let’s build together. team@appandflow.com
+
 # expo-context-menu
 
 Crossplatform Context Menu component for Expo managed apps.
