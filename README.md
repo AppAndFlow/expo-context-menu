@@ -1,6 +1,6 @@
 # expo-context-menu
 
-Context Menu For Expo Managed Apps
+Crossplatform Context Menu component for Expo managed apps.
 
 ## Example
 
