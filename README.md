@@ -1,6 +1,12 @@
 # expo-context-menu
 
-Context Menu For Expo
+Context Menu For Expo Managed Apps
+
+## Example
+
+With our library you can customize your context menu to have the look and feel of the native menus. You can see the full repository of this example [here](https://github.com/AppAndFlow/expo-context-menu-demo).
+
+ <video src="https://github.com/user-attachments/assets/f67be9ec-4b58-4adc-8069-d66c357df7b3"> |
 
 ## Installation
 
@@ -46,10 +52,9 @@ import { ExpoContextMenu } from '@appandflow/expo-context-menu';
 
 ## Props
 
-#### menuItems
-
-the items you pass when them menu get show
-
+| Name | Description |
+| ---- | ----------- |
+| menuItems | Custom items you can display when the context menu is open |
 ```tsx
 {
   title: string;
@@ -58,41 +63,17 @@ the items you pass when them menu get show
   destructive?: boolean;
 }[];
 ```
+| Name | Description |
+| ---- | ----------- |
+| renderMenu (optional) | Custom component to replace the container rendering the menuItems |
+| isFullScreen (optional) | Boolean to have the full screen layout animation |
+| onPress (optional) | Function to pass a custom event when pressing on the children |
+| onLongPressStart (optional) | Callback to customize the long press starting action |
+| onLongPressEnd (optional) | Callback to customize the long press ending action |
+| onMenuOpen (optional) | Callback to customize the children when the menu is open |
+| onMenuClose (optional) | Callback to customize the children when the menu closes | 
+| itemScaleOnMenuOpen (optional) | Number to change the scale of the children when the menu is open (default to 0.97) |
 
-#### renderMenu | optional
-
-if you want to overide the menu component you can pass a component
-
-
-#### isFullScreen | optional
-
-full screen layout animation vs the default one of just adding blur
-
-#### onPress
-
-the onPress event pass to the children
-
-#### onLongPressStart | optional
-
-callback when the long press start
-
-#### onLongPressEnd | optional
-
-callback when the long press end
-
-#### onMenuOpen | optional
-
-callback when the meny open
-
-#### onMenuClose | optional
-
-callback when the menu close
-
-#### itemScaleOnMenuOpen | optional
-
-the number as the scaling value of the item when the menu open
-
-default: 0.97
 
 ## Contributing
 
