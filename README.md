@@ -4,7 +4,8 @@ App & Flow is a Montreal-based React Native engineering and consulting studio. W
 
 # expo-context-menu
 
-Crossplatform Context Menu component for Expo managed apps.
+Crossplatform Context Menu component - compatible with Expo managed apps.
+https://developer.apple.com/design/human-interface-guidelines/context-menus
 
 ## Example
 
