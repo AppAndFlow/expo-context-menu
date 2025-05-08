@@ -24,7 +24,7 @@ npm install @appandflow/expo-context-menu
 Wrap your application with the ExpoContextMenuProvider
 
 ```tsx
-import { ExpoContextMenuProvider } from '@appanflow/expo-context-menu';
+import { ExpoContextMenuProvider } from '@appandflow/expo-context-menu';
 
 <ExpoContextMenuProvider>
   <YourApp />
